@@ -16,7 +16,9 @@ Modular and replicable infrastructure.
 
 ## Architecture
 
-![3 node high-level architecture](static/3_node_high_level_architecture.png)
+<p align="center">
+  <img src="static/3_node_high_level_architecture.png" alt="Architecture Diagram" width="50%">
+</p>
 
 The base architecture is composed by Computation Nodes (CN) and an Orchestrator. The primary consideration is to clearly define the security domains for private data. To each domain is assigned its own CN. 
 
