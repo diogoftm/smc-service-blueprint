@@ -1,0 +1,25 @@
+get:
+  summary: CN public information.
+  description: Retrieve public information about the CN.
+  tags:
+    - General Information
+  responses:
+    "200":
+      description: Successful CN information retrieval
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "IT CN"
+              owner:
+                type: string
+                example: "IT Aveiro"
+              cn_uuid:
+                type: string
+                format: uuid
+                example: "123e4567-e89b-12d3-a456-426614174000"
+    "500":
+      $ref: '../components/InternalServerError.yaml'

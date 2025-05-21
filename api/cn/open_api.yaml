@@ -1,0 +1,51 @@
+openapi: 3.0.4
+info:
+  title: Computation Node API
+  description: |
+    Computation Node (CN) API implemented by each CN. Consumed by the centralized Orchestrator to set up 
+    and trigger Secure Multiparty Computations between CNs. This is done without having access to any
+    information about the inputs that can jeopardize their privacy.
+
+    Generic computation execution procedure followed by the Orchestrator:
+    1. Call ` GET /inputs` in all CNs to get information about the supported computation types of 
+    each CN and also the number of total and new inputs for each computation type;
+    2. Based on a pre-defined policy select the CNs that will participate in the computation.
+    3. Call `POST /smc/{cid}` in all selected CNs, indicating its unique identifier, the computation type,
+    and a series of computation-specific arguments;
+    4. Call `POST /parties/{cid}` in all selected CNs to set IPs or hostnames of all parties that will participate in the computation;
+    5. Call `POST /inputs/{cid}` in all selected CNs to set the number of new and total inputs for each parties;
+    6. Call `POST /start/{cid}` in all selected CNs to trigger the execution of the computation;
+    7. Call `GET /status/{cid}` to get the status of the computation;
+
+  version: 0.0.1
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://127.0.0.1:4010/
+    description: Local Mock CN
+
+paths:
+  /info:
+    $ref: "paths/info.yaml"
+  /smc/{cid}:
+    $ref: "paths/smc_{cid}.yaml"
+  /inputs:
+    $ref: "paths/inputs.yaml"
+  /inputs/{cid}:
+    $ref: "paths/inputs_{cid}.yaml"
+  /parties/{cid}:
+    $ref: "paths/parties_{cid}.yaml"
+  /start/{cid}:
+    $ref: "paths/start_{cid}.yaml"
+  /status/{cid}:
+    $ref: "paths/status_{cid}.yaml"
+
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key required in `api_key` header

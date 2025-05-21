@@ -1,0 +1,179 @@
+get:
+  summary: Retrieve the number of available private inputs for a given computation
+  description: |
+    Retrieve the number of available private inputs for a given computation identified by `cid`.
+    It includes both total amount of inputs and the number of inputs that were not already part
+    of a computation.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  parameters:
+    - name: cid
+      in: path
+      description: "Computation Identifier"
+      example: 14
+      required: true
+      schema:
+        type: integer
+  responses:
+    "200":
+      description: Successful information retrieval
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              new:
+                type: integer
+                example: 2
+              total:
+                type: integer
+                example: 11
+            required:
+              - new
+              - total
+    "400":
+      description: Invalid arguments
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Invalid arguments
+    "403":
+      $ref: "../components/UnauthorizedError.yaml"
+    "500":
+      $ref: "../components/InternalServerError.yaml"
+post:
+  summary: Set computation number of inputs per party
+  description: |
+    Set the number of inputs for all parties in a computation identified by `cid`.
+
+    In the request body, `nInputs` includes the inputs for this specific CN, this
+    ensures that even if the parties were not yet set, the CN can already know its
+    number of inputs. `nInputsAllPArties` has the list of inputs for all parties, 
+    the order and size of this list shall match the one imputed in `/parties/{cid}`. 
+    This ensures that each Cn can make an association between the number of inputs
+    and a specific peer CN. 
+
+    Not available after the computation has started or finished execution.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  parameters:
+    - name: cid
+      in: path
+      description: "Computation Identifier"
+      example: 14
+      required: true
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    description: Computation number of inputs for each party.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            nInputs:
+              type: object
+              properties:
+                new:
+                  type: integer
+                  example: 2
+                total:
+                  type: integer
+                  example: 3
+              required:
+                - new
+                - total
+            nInputsAllParties:
+              type: array
+              items:
+                type: object
+                properties:
+                  new:
+                    type: integer
+                    example: 5
+                  total:
+                    type: integer
+                    example: 6
+                required:
+                  - new
+                  - total
+          required:
+            - nInputs
+            - nInputsAllParties
+  responses:
+    "200":
+      description: Parties successfully set
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Computation created successfully
+    "400":
+      description: Invalid arguments
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Invalid arguments
+    "403":
+      $ref: "../components/UnauthorizedError.yaml"
+    "500":
+      $ref: "../components/InternalServerError.yaml"
+delete:
+  summary: Reset computation number of inputs
+  description: |
+    Reset the number of inputs previously set for a computation identified by `cid`.
+
+    Not available after the computation has started or finished execution.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  parameters:
+    - name: cid
+      in: path
+      description: Computation Identifier
+      example: 14
+      required: true
+      schema:
+        type: integer
+  responses:
+    "200":
+      description: Parties successfully set
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Computation created successfully
+    "400":
+      description: Invalid arguments
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Invalid arguments
+    "403":
+      $ref: "../components/UnauthorizedError.yaml"
+    "500":
+      $ref: "../components/InternalServerError.yaml"

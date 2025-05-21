@@ -1,0 +1,104 @@
+post:
+  summary: Instantiate a new computation
+  description: |
+    Instantiate a new computation by indicating a unique identifier `cid`, the computation type 
+    and any additional computation-specific parameters.
+
+    This endpoint is called by the Orchestrator on each CN that will participate the computation.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  parameters:
+    - name: cid
+      in: path
+      description: Computation Identifier
+      example: 14
+      required: true
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    description: Computation parameters
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            computationType:
+              type: string
+              example: genome
+            additionalInfo:
+              type: object
+              example: { "model": "K2P", "clustering": "UPGMA" }
+          required:
+            - computationType
+
+  responses:
+    "200":
+      description: Successful computation creation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Computation created successfully
+    "400":
+      description: Invalid user inputs
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Cannot create computation with provided parameters
+    "403":
+      $ref: "../components/UnauthorizedError.yaml"
+    "500":
+      $ref: "../components/InternalServerError.yaml"
+delete:
+  summary: Delete computation
+  description: |
+    Delete a computation identified by `cid`. 
+
+    Not available after the computation has started or finished execution.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  parameters:
+    - name: cid
+      in: path
+      description: "Computation Identifier"
+      example: 14
+      required: true
+      schema:
+        type: integer
+  responses:
+    "200":
+      description: Computation deleted successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Computation deleted successfully
+    "400":
+      description: Invalid arguments
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Invalid arguments
+    "403":
+      $ref: "../components/UnauthorizedError.yaml"
+    "500":
+      $ref: "../components/InternalServerError.yaml"

@@ -1,0 +1,50 @@
+get:
+  summary: Retrieve current computation status
+  description: |
+    Retrieve the current status of a computation identified by `cid`.
+
+    Possible status codes:
+    - `-1` - Computation has finished with an error;
+    - `0` - Computation has yet to be run;
+    - `1` - Computation is in execution;
+    - `2` - Computation has finished successfully.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  parameters:
+    - name: cid
+      in: path
+      description: Computation Identifier
+      example: 14
+      required: true
+      schema:
+        type: integer
+  responses:
+    "200":
+      description: Successful status retrieval
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                enum: [0, 1, 2]
+                example: 0
+            required:
+              - status
+    "400":
+      description: Invalid arguments
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Invalid arguments
+    "403":
+      $ref: "../components/UnauthorizedError.yaml"
+    "500":
+      $ref: "../components/InternalServerError.yaml"

@@ -1,0 +1,16 @@
+services:
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../api/cn/:/spec/:ro
+    environment:
+      SWAGGER_JSON: /spec/open_api.yaml
+  mock-api:
+    image: stoplight/prism:4
+    command: mock -h 0.0.0.0 /spec/open_api.yaml
+    ports:
+      - "4010:4010"
+    volumes:
+      - ../api/cn/:/spec:ro

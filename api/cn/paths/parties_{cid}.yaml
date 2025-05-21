@@ -1,0 +1,110 @@
+post:
+  summary: Set computation parties
+  description: |
+    Set all peers of a computation identified by `cid`.
+
+    The order of the `ips` and `saes` shall be correlated and match the
+    `index` of each party. Consequently, if for a given CN, the `index` is
+    set as, for example, `0`, the index 0 of each list is for this CN. 
+    Nonetheless, all values matter since it will enable the CNs to know 
+    where to find its peers.
+
+    The `usePSK` when set to `true` shall trigger the CNs to (establish and) 
+    set a pre-shared key for key combination.
+
+    Not available after the computation has started or finished execution.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  parameters:
+    - name: cid
+      in: path
+      description: Computation Identifier
+      example: 14
+      required: true
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    description: Computation parties information
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            ips:
+              oneOf:
+                - type: array
+                  format: ipv4
+                  example: ["192.168.1.25", "192.168.1.23"]
+                - type: array
+                  format: hostname
+                  example: ["test_0.local", "test_1.local"]
+            saes:
+              oneOf:
+                - type: array
+                  items:
+                    type: string
+                  example: ["SAE_001", "SAE_002"]
+                - type: array
+                  items:
+                    type: uri
+                  example:
+                    [
+                      "qokd://app1@aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+                      "qokd://app2@bbbbbbbb-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+                    ]
+            index:
+              type: integer
+              example: 1
+            usePSK:
+              type: boolean
+              default: false
+          required:
+            - ips
+            - saes
+            - index
+delete:
+  summary: Reset computation parties
+  description: |
+    Reset all information about the parties previously set for the computation identified by `cid`.
+
+    Not available after the computation has started or finished execution.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  parameters:
+    - name: cid
+      in: path
+      description: Computation Identifier
+      example: 14
+      required: true
+      schema:
+        type: integer
+  responses:
+    "200":
+      description: Parties successfully reset
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Computation created successfully
+    "400":
+      description: Invalid user inputs
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Cannot create computation with provided parameters
+    "403":
+      $ref: "../components/UnauthorizedError.yaml"
+    "500":
+      $ref: "../components/InternalServerError.yaml"

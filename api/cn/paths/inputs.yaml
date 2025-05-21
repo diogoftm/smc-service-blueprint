@@ -1,0 +1,36 @@
+get:
+  summary: Retrieve the number of available private inputs for each supported computation type
+  description: |
+    Retrieve the number of available private inputs for each supported computation type.
+    It includes both the total amount of inputs and the number of inputs that were not already 
+    part of a computation, i.e. the new inputs.
+  tags:
+    - Computation Orchestration
+  security:
+    - api_key: []
+  responses:
+    "200":
+      description: Successful information retrieval
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              {
+                "genome": { "new": 1, "total": 12 },
+                "poc": { "new": 2, "total": 2 },
+              }
+            additionalProperties:
+              type: object
+              properties:
+                new:
+                  type: integer
+                total:
+                  type: integer
+              required:
+                - new
+                - total
+    "403":
+      $ref: "../components/UnauthorizedError.yaml"
+    "500":
+      $ref: "../components/InternalServerError.yaml"
