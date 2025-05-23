@@ -34,7 +34,7 @@ docker compose up swagger-ui
     A state-of-the-art framework for SMC protocols and implementations.
 - [QMP-SPDZ](https://github.com/diogoftm/QMP-SPDZ)  
     MP-SPDZ fork with a quantum-enabled version implementation of SMC protocols based on Oblivious Transfer leveraging quantum oblivious keys.
-- [Generation and Distribution of Quantum Oblivious Keys for Secure Multiparty Computation](https://www.mdpi.com/2076-3417/10/12/4080)
+- [Generation and Distribution of Quantum Oblivious Keys for Secure Multiparty Computation](https://www.mdpi.com/2076-3417/10/12/4080) <br>
     Research paper with an overview of the main concepts behind quantum oblivious keys. 
 
 ## Acknowledgments
